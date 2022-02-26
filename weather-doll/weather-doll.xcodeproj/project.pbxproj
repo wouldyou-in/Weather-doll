@@ -13,6 +13,15 @@
 		36F91FD527C9F59B00EA4937 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FD327C9F59B00EA4937 /* LaunchScreen.storyboard */; };
 		36F91FE227C9FB1B00EA4937 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FE127C9FB1B00EA4937 /* HomeVC.swift */; };
 		36F91FE627C9FD8300EA4937 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FE527C9FD8300EA4937 /* Date+.swift */; };
+		36F91FE827C9FE0100EA4937 /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FE727C9FE0100EA4937 /* UICollectionView+.swift */; };
+		36F91FEA27C9FE1000EA4937 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FE927C9FE1000EA4937 /* UIColor+.swift */; };
+		36F91FEF27C9FFC300EA4937 /* GmarketSansBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FEC27C9FFC300EA4937 /* GmarketSansBold.otf */; };
+		36F91FF027C9FFC300EA4937 /* GmarketSansMedium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FED27C9FFC300EA4937 /* GmarketSansMedium.otf */; };
+		36F91FF127C9FFC300EA4937 /* GmarketSansLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FEE27C9FFC300EA4937 /* GmarketSansLight.otf */; };
+		36F91FF327CA002300EA4937 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FF227CA002300EA4937 /* UIFont+.swift */; };
+		36F91FF527CA00EB00EA4937 /* UIScreen+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FF427CA00EB00EA4937 /* UIScreen+.swift */; };
+		36F91FF727CA014F00EA4937 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FF627CA014F00EA4937 /* UITextField+.swift */; };
+		36F91FF927CA018E00EA4937 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FF827CA018E00EA4937 /* UIView+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +33,15 @@
 		36F91FD627C9F59B00EA4937 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		36F91FE127C9FB1B00EA4937 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		36F91FE527C9FD8300EA4937 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		36F91FE727C9FE0100EA4937 /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
+		36F91FE927C9FE1000EA4937 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		36F91FEC27C9FFC300EA4937 /* GmarketSansBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansBold.otf; sourceTree = "<group>"; };
+		36F91FED27C9FFC300EA4937 /* GmarketSansMedium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansMedium.otf; sourceTree = "<group>"; };
+		36F91FEE27C9FFC300EA4937 /* GmarketSansLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = GmarketSansLight.otf; sourceTree = "<group>"; };
+		36F91FF227CA002300EA4937 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		36F91FF427CA00EB00EA4937 /* UIScreen+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+.swift"; sourceTree = "<group>"; };
+		36F91FF627CA014F00EA4937 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
+		36F91FF827CA018E00EA4937 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +93,7 @@
 		36F91FDD27C9FA2F00EA4937 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				36F91FEB27C9FFA500EA4937 /* Font */,
 				36F91FD127C9F59B00EA4937 /* Assets.xcassets */,
 				36F91FD627C9F59B00EA4937 /* Info.plist */,
 				36F91FDF27C9FA6900EA4937 /* Storyboard */,
@@ -119,8 +138,24 @@
 			isa = PBXGroup;
 			children = (
 				36F91FE527C9FD8300EA4937 /* Date+.swift */,
+				36F91FE727C9FE0100EA4937 /* UICollectionView+.swift */,
+				36F91FE927C9FE1000EA4937 /* UIColor+.swift */,
+				36F91FF227CA002300EA4937 /* UIFont+.swift */,
+				36F91FF427CA00EB00EA4937 /* UIScreen+.swift */,
+				36F91FF627CA014F00EA4937 /* UITextField+.swift */,
+				36F91FF827CA018E00EA4937 /* UIView+.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		36F91FEB27C9FFA500EA4937 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FEC27C9FFC300EA4937 /* GmarketSansBold.otf */,
+				36F91FEE27C9FFC300EA4937 /* GmarketSansLight.otf */,
+				36F91FED27C9FFC300EA4937 /* GmarketSansMedium.otf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,6 +217,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				36F91FD527C9F59B00EA4937 /* LaunchScreen.storyboard in Resources */,
+				36F91FF027C9FFC300EA4937 /* GmarketSansMedium.otf in Resources */,
+				36F91FF127C9FFC300EA4937 /* GmarketSansLight.otf in Resources */,
+				36F91FEF27C9FFC300EA4937 /* GmarketSansBold.otf in Resources */,
 				36F91FD227C9F59B00EA4937 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,8 +233,14 @@
 			files = (
 				36F91FE227C9FB1B00EA4937 /* HomeVC.swift in Sources */,
 				36F91FC927C9F59A00EA4937 /* AppDelegate.swift in Sources */,
+				36F91FF727CA014F00EA4937 /* UITextField+.swift in Sources */,
 				36F91FCB27C9F59A00EA4937 /* SceneDelegate.swift in Sources */,
+				36F91FF927CA018E00EA4937 /* UIView+.swift in Sources */,
+				36F91FF527CA00EB00EA4937 /* UIScreen+.swift in Sources */,
+				36F91FF327CA002300EA4937 /* UIFont+.swift in Sources */,
 				36F91FE627C9FD8300EA4937 /* Date+.swift in Sources */,
+				36F91FE827C9FE0100EA4937 /* UICollectionView+.swift in Sources */,
+				36F91FEA27C9FE1000EA4937 /* UIColor+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
