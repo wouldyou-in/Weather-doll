@@ -9,21 +9,21 @@
 /* Begin PBXBuildFile section */
 		36F91FC927C9F59A00EA4937 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FC827C9F59A00EA4937 /* AppDelegate.swift */; };
 		36F91FCB27C9F59A00EA4937 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FCA27C9F59A00EA4937 /* SceneDelegate.swift */; };
-		36F91FCD27C9F59A00EA4937 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FCC27C9F59A00EA4937 /* ViewController.swift */; };
-		36F91FD027C9F59A00EA4937 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FCE27C9F59A00EA4937 /* Main.storyboard */; };
 		36F91FD227C9F59B00EA4937 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FD127C9F59B00EA4937 /* Assets.xcassets */; };
 		36F91FD527C9F59B00EA4937 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36F91FD327C9F59B00EA4937 /* LaunchScreen.storyboard */; };
+		36F91FE227C9FB1B00EA4937 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FE127C9FB1B00EA4937 /* HomeVC.swift */; };
+		36F91FE627C9FD8300EA4937 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F91FE527C9FD8300EA4937 /* Date+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		36F91FC527C9F59A00EA4937 /* weather-doll.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "weather-doll.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F91FC827C9F59A00EA4937 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36F91FCA27C9F59A00EA4937 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		36F91FCC27C9F59A00EA4937 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		36F91FCF27C9F59A00EA4937 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		36F91FD127C9F59B00EA4937 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		36F91FD427C9F59B00EA4937 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		36F91FD627C9F59B00EA4937 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36F91FE127C9FB1B00EA4937 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		36F91FE527C9FD8300EA4937 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +56,71 @@
 		36F91FC727C9F59A00EA4937 /* weather-doll */ = {
 			isa = PBXGroup;
 			children = (
-				36F91FC827C9F59A00EA4937 /* AppDelegate.swift */,
-				36F91FCA27C9F59A00EA4937 /* SceneDelegate.swift */,
-				36F91FCC27C9F59A00EA4937 /* ViewController.swift */,
-				36F91FCE27C9F59A00EA4937 /* Main.storyboard */,
-				36F91FD127C9F59B00EA4937 /* Assets.xcassets */,
-				36F91FD327C9F59B00EA4937 /* LaunchScreen.storyboard */,
-				36F91FD627C9F59B00EA4937 /* Info.plist */,
+				36F91FDC27C9FA2300EA4937 /* Source */,
+				36F91FDD27C9FA2F00EA4937 /* Resource */,
 			);
 			path = "weather-doll";
+			sourceTree = "<group>";
+		};
+		36F91FDC27C9FA2300EA4937 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FE427C9FD6000EA4937 /* Extensions */,
+				36F91FE027C9FA8600EA4937 /* Vcs */,
+				36F91FDE27C9FA4F00EA4937 /* Support */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		36F91FDD27C9FA2F00EA4937 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FD127C9F59B00EA4937 /* Assets.xcassets */,
+				36F91FD627C9F59B00EA4937 /* Info.plist */,
+				36F91FDF27C9FA6900EA4937 /* Storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		36F91FDE27C9FA4F00EA4937 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FC827C9F59A00EA4937 /* AppDelegate.swift */,
+				36F91FCA27C9F59A00EA4937 /* SceneDelegate.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		36F91FDF27C9FA6900EA4937 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FD327C9F59B00EA4937 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		36F91FE027C9FA8600EA4937 /* Vcs */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FE327C9FB1E00EA4937 /* Home */,
+			);
+			path = Vcs;
+			sourceTree = "<group>";
+		};
+		36F91FE327C9FB1E00EA4937 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FE127C9FB1B00EA4937 /* HomeVC.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		36F91FE427C9FD6000EA4937 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				36F91FE527C9FD8300EA4937 /* Date+.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -127,7 +183,6 @@
 			files = (
 				36F91FD527C9F59B00EA4937 /* LaunchScreen.storyboard in Resources */,
 				36F91FD227C9F59B00EA4937 /* Assets.xcassets in Resources */,
-				36F91FD027C9F59A00EA4937 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +193,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36F91FCD27C9F59A00EA4937 /* ViewController.swift in Sources */,
+				36F91FE227C9FB1B00EA4937 /* HomeVC.swift in Sources */,
 				36F91FC927C9F59A00EA4937 /* AppDelegate.swift in Sources */,
 				36F91FCB27C9F59A00EA4937 /* SceneDelegate.swift in Sources */,
+				36F91FE627C9FD8300EA4937 /* Date+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		36F91FCE27C9F59A00EA4937 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				36F91FCF27C9F59A00EA4937 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		36F91FD327C9F59B00EA4937 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -291,10 +339,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = U24ZACT97M;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "weather-doll/Info.plist";
+				INFOPLIST_FILE = "weather-doll/Resource/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -302,7 +350,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ikbum.weather-doll";
+				PRODUCT_BUNDLE_IDENTIFIER = "weather-doll";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -319,10 +367,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = U24ZACT97M;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "weather-doll/Info.plist";
+				INFOPLIST_FILE = "weather-doll/Resource/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -330,7 +378,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ikbum.weather-doll";
+				PRODUCT_BUNDLE_IDENTIFIER = "weather-doll";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
