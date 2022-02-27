@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct Constants {
+    static let baseURL: String = "https://api.openweathermap.org/data/2.5/weather?"
+    static let dayAgoURL: String = "http://history.openweathermap.org/data/2.5/history/city?"
+}
