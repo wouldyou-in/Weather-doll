@@ -38,6 +38,9 @@ class HomeVC: UIViewController {
         $0.bounces = true
         $0.showsVerticalScrollIndicator = false
     }
+    //bottomSheet
+    private let bottomSheetView = BottomSheetView()
+    
     let head = CollectionHeaderView()
     
     var latitude: String = "37.6514611111111"
@@ -51,6 +54,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .mainThemeColor
+        bottomSheetSetting()
         collectionViewSetting()
         setTopViewLayout()
         setRecommendViewLayout()
@@ -87,6 +91,10 @@ class HomeVC: UIViewController {
             $0.trailing.equalTo(-15)
             $0.width.height.equalTo(36)
         }
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(locationLabelClicked(_:)))
+        locationLabel.addGestureRecognizer(gesture)
+        locationLabel.isUserInteractionEnabled = true
     }
     
     func setRecommendViewLayout(){
@@ -114,6 +122,10 @@ class HomeVC: UIViewController {
         
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = .zero
     }
+    func bottomSheetSetting(){
+        bottomSheetView.tableView.delegate = self
+        bottomSheetView.tableView.dataSource = self
+    }
     
     func getWeatherData(){
         GetWeatherDataService.shared.getWeatherData(lat: latitude, lon: longitude, appid: SecureURL.userID){ (response) in
@@ -135,6 +147,14 @@ class HomeVC: UIViewController {
             
                }
     }
+    
+    @objc private func locationLabelClicked(_ sender: Any){
+        self.view.addSubview(bottomSheetView)
+        bottomSheetView.snp.makeConstraints{
+            $0.bottom.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(600)
+        }
+         }
 
 }
 
@@ -185,4 +205,24 @@ extension HomeVC: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 155, height: 180)
     }
+}
+
+extension HomeVC: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+}
+extension HomeVC: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchTVC.identifier) as! SearchTVC
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    
 }
