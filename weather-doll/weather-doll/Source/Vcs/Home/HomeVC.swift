@@ -40,6 +40,14 @@ class HomeVC: UIViewController {
     }
     let head = CollectionHeaderView()
     
+    var latitude: String = "37.6514611111111"
+    var longitude: String = "127.058388888888"
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getWeatherData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .mainThemeColor
@@ -105,8 +113,27 @@ class HomeVC: UIViewController {
         collectionView.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionHeaderView")
         
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = .zero
-
-
+    }
+    
+    func getWeatherData(){
+        GetWeatherDataService.shared.getWeatherData(lat: latitude, lon: longitude, appid: SecureURL.userID){ (response) in
+                   switch response
+                   {
+                   case .success(let data) :
+                       if let response = data as? WeatherDataModel{
+                           print(response)
+                       }
+                   case .requestErr(let message) :
+                       print("requestERR")
+                   case .pathErr :
+                       print("pathERR")
+                   case .serverErr:
+                       print("serverERR")
+                   case .networkFail:
+                       print("networkFail")
+                   }
+            
+               }
     }
 
 }
