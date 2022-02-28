@@ -26,6 +26,10 @@ class SearchTVC: UITableViewCell {
         $0.clipsToBounds = true
     }
     
+    func setData(city: String){
+        locationLabel.text = city
+    }
+    
     func setLayout(){
         addSubviews([locationLabel, selectButton])
         
