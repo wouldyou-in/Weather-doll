@@ -12,10 +12,12 @@ import Then
 class SearchTVC: UITableViewCell {
     static let identifier: String = "SearchTVC"
     
+    var selectButtonCompletion: ((String) -> String)?
+    
     private let locationLabel = UILabel().then{
         $0.font = UIFont.gmarketSansMediumFont(ofSize: 24)
         $0.textColor = UIColor.black
-        $0.text = "akdjfaldsfjlasdfk"
+        $0.text = ""
     }
     private let selectButton = UIButton().then{
         $0.backgroundColor = UIColor.selectThemeColor
@@ -31,7 +33,7 @@ class SearchTVC: UITableViewCell {
     }
     
     func setLayout(){
-        addSubviews([locationLabel, selectButton])
+        self.contentView.addSubviews([locationLabel, selectButton])
         
         locationLabel.snp.makeConstraints{
             $0.centerY.equalToSuperview()
@@ -46,6 +48,17 @@ class SearchTVC: UITableViewCell {
             $0.height.equalTo(30)
             $0.width.equalTo(45)
         }
+        
+        setButtonTarget()
+    }
+    
+    private func setButtonTarget(){
+        selectButton.addTarget(self, action: #selector(selectButtonClicked(_:)), for: .touchUpInside)
+    }
+    
+    @objc func selectButtonClicked(_ sender: UIButton) {
+        guard let completion = selectButtonCompletion else { return }
+        completion(self.locationLabel.text ?? "")
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
