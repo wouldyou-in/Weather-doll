@@ -11,7 +11,7 @@ import Then
 
 class HomeVC: UIViewController {
     //topView
-    private var locationLabel = LocationLabel(type: .noSelected)
+    private var locationLabel = LocationLabel(description: "")
     private let tempLabel = UILabel().then {
         $0.font = UIFont.gmarketSansBoldFont(ofSize: 64)
         $0.textColor = UIColor.white
@@ -41,16 +41,19 @@ class HomeVC: UIViewController {
     //bottomSheet
     private let bottomSheetView = BottomSheetView()
     
+    //firstView
+    private let firstView = FirstScene()
+    
     let head = CollectionHeaderView()
     
-    var latitude: String = "37.6514611111111"
-    var longitude: String = "127.058388888888"
+    var latitude: String = ""
+    var longitude: String = ""
     
     var viewTranslation = CGPoint(x: 0, y: 0)
     var viewVelocity = CGPoint(x: 0, y: 0)
     
     var stateResult = [String]()
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getWeatherData()
@@ -64,6 +67,7 @@ class HomeVC: UIViewController {
         setRecommendViewLayout()
         pangestureAction()
         bottomSheetSetting()
+        setLocationStr()
     }
     
     func setTopViewLayout(){
@@ -202,6 +206,35 @@ class HomeVC: UIViewController {
             
                }
     }
+    func setFirstView() {
+        UserDefaults.standard.set(true, forKey: "isFirst")
+        if UserDefaults.standard.bool(forKey: "isFirst") {
+            view.addSubview(firstView)
+            firstView.setLayout(locView: locationLabel, notiButton: notiButton)
+            firstView.snp.makeConstraints{
+                $0.top.bottom.leading.trailing.equalTo(0)
+            }
+        }
+       
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(firstViewClicked(_:)))
+        firstView.addGestureRecognizer(gesture)
+        firstView.isUserInteractionEnabled = true
+    }
+    
+    
+    func setLocationStr() {
+        let userDefault = UserDefaults.standard
+        print(userDefault.bool(forKey: "isFirst"), "isFirst")
+        
+        if userDefault.bool(forKey: "isFirst") {
+            setFirstView()
+        }
+        else {
+            locationLabel.selectedLabel.text = userDefault.string(forKey: "locationName")
+            locationLabel.selectedLabelDescription.text = "의 날씨입니다!"
+        }
+    }
+    
     
     @objc private func locationLabelClicked(_ sender: Any){
         if (bottomSheetView.isHidden == true){
@@ -210,9 +243,13 @@ class HomeVC: UIViewController {
         bottomSheetView.isHidden = false
             bottomSheetView.snp.remakeConstraints{
                 $0.bottom.leading.trailing.equalToSuperview().offset(0)
-                $0.height.equalTo(600)
+                $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
             }
         }
+    @objc private func firstViewClicked(_ sender: Any){
+        firstView.isHidden = true
+    }
+     
 }
 
 extension HomeVC: UICollectionViewDelegate {
@@ -279,9 +316,16 @@ extension HomeVC: UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTVC.identifier) as! SearchTVC
         cell.selectionStyle = .none
         cell.setData(city: stateResult[indexPath.row])
+                
+        cell.selectButtonCompletion = {
+            location in
+            UserDefaults.standard.set(false, forKey: "isFirst")
+            UserDefaults.standard.set(location, forKey: "locationName")
+            self.setLocationStr()
+            return location
+        }
         return cell
     }
-    
     
 }
 extension HomeVC: UITextFieldDelegate {
