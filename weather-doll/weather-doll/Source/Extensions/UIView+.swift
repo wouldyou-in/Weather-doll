@@ -44,5 +44,10 @@ extension UIView {
     @objc func dismissKeyboard() {
         self.endEditing(true)
     }
+    func presentAnimation() {
+        UIView.animate(withDuration: 0.5, animations: ({
+            self.frame = CGRect(x: 0, y: -UIScreen.getDeviceHeight(), width: UIScreen.getDeviceWidth(), height: UIScreen.getDeviceHeight() * 0.73)
+        }))
+    }
 }
 
