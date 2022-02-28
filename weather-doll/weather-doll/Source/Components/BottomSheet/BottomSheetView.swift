@@ -13,7 +13,7 @@ class BottomSheetView: UIView {
     private let topBarImageView = UIImageView().then{
         $0.image = UIImage(named: "topHandle")
     }
-    private let searchBar = SearchBar()
+    let searchBar = SearchBar()
     let tableView = UITableView().then{
         $0.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -64,4 +64,5 @@ class BottomSheetView: UIView {
         setLayout()
 
     }
+    
 }
