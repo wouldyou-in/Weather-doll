@@ -46,6 +46,11 @@ class HomeVC: UIViewController {
     var latitude: String = "37.6514611111111"
     var longitude: String = "127.058388888888"
     
+    var viewTranslation = CGPoint(x: 0, y: 0)
+    var viewVelocity = CGPoint(x: 0, y: 0)
+    
+    var stateResult = [String]()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getWeatherData()
@@ -54,10 +59,11 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .mainThemeColor
-        bottomSheetSetting()
         collectionViewSetting()
         setTopViewLayout()
         setRecommendViewLayout()
+        pangestureAction()
+        bottomSheetSetting()
     }
     
     func setTopViewLayout(){
@@ -98,7 +104,6 @@ class HomeVC: UIViewController {
     }
     
     func setRecommendViewLayout(){
-
         view.addSubview(recommendBackgroundView)
         recommendBackgroundView.addSubview(collectionView)
         collectionView.addSubview(head)
@@ -123,10 +128,60 @@ class HomeVC: UIViewController {
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = .zero
     }
     func bottomSheetSetting(){
+        view.addSubview(bottomSheetView)
+        bottomSheetView.snp.makeConstraints{
+            $0.bottom.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(600)
+        }
+        bottomSheetView.isHidden = true
+        
         bottomSheetView.tableView.delegate = self
         bottomSheetView.tableView.dataSource = self
+        bottomSheetView.searchBar.delegate = self
+
+        bottomSheetView.searchBar.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
+    func pangestureAction(){
+        bottomSheetView.frame = CGRect(x: 0, y: 0, width: UIScreen.getDeviceWidth(), height: UIScreen.getDeviceHeight() * 0.32)
+        bottomSheetView.center = CGPoint(x: UIScreen.getDeviceWidth() / 2, y: UIScreen.getDeviceHeight() * 0.32)
+           let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.drag))
+        bottomSheetView.addGestureRecognizer(panGesture)
+    }
+    @objc func drag(sender: UIPanGestureRecognizer) {
+           viewTranslation = sender.translation(in: bottomSheetView)
+           viewVelocity = sender.translation(in: bottomSheetView)
+           switch sender.state {
+           case .changed:
+               if viewVelocity.y < 0 {
+                   bottomSheetView.snp.remakeConstraints{
+                       $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                       $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
+                   }
+               }
+               else {
+                   bottomSheetView.snp.remakeConstraints{
+                       $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                       $0.height.equalTo((UIScreen.getDeviceHeight() * 0.73) - viewVelocity.y)
+                   }
+               }
+           case .ended:
+               if viewTranslation.y < 200 {
+                   bottomSheetView.snp.remakeConstraints{
+                       $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                       $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
+                   }
+               }
+               else {
+                   bottomSheetView.isHidden = true
+               }
+              
+           default:
+               print("error")
+               break
+           }
+       }
+
     func getWeatherData(){
         GetWeatherDataService.shared.getWeatherData(lat: latitude, lon: longitude, appid: SecureURL.userID){ (response) in
                    switch response
@@ -149,13 +204,15 @@ class HomeVC: UIViewController {
     }
     
     @objc private func locationLabelClicked(_ sender: Any){
-        self.view.addSubview(bottomSheetView)
-        bottomSheetView.snp.makeConstraints{
-            $0.bottom.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(600)
+        if (bottomSheetView.isHidden == true){
+            bottomSheetView.presentAnimation()
         }
-         }
-
+        bottomSheetView.isHidden = false
+            bottomSheetView.snp.remakeConstraints{
+                $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                $0.height.equalTo(600)
+            }
+        }
 }
 
 extension HomeVC: UICollectionViewDelegate {
@@ -215,14 +272,57 @@ extension HomeVC: UITableViewDelegate{
 }
 extension HomeVC: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return stateResult.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTVC.identifier) as! SearchTVC
         cell.selectionStyle = .none
+        cell.setData(city: stateResult[indexPath.row])
         return cell
     }
     
     
+}
+extension HomeVC: UITextFieldDelegate {
+    func searchState(str: String) -> Bool{
+        var state = str.replacingOccurrences(of: " ", with: "")
+        if locationModel.state.contains(state) {
+            return true
+        }
+        else{
+            return false
+        }
+    }
+    func splitText(text: String) -> UInt32? {
+        return UnicodeScalar(text)?.value
+    }
+    func searchState(){
+        var stateArr = locationModel.cityArr
+        var text = bottomSheetView.searchBar.text ?? ""
+        var start = 0
+        var answer = [Int]()
+        stateResult = []
+        var t = String()
+        
+        for state in stateArr{
+            t = state
+            while let range = t.range(of: text) {
+                start += t.distance(from: t.startIndex, to: range.lowerBound)
+                answer.append(start)
+                start += t.distance(from: t.startIndex, to: range.upperBound) - 1
+                t = String(t[range.upperBound...])
+                stateResult.append(state)
+            }
+        }
+    }
+    
+    
+    @objc func textFieldDidChange(_ sender: Any?) {
+        searchState()
+        bottomSheetView.tableView.reloadData()
+    }
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        print("start")
+//    }
 }
