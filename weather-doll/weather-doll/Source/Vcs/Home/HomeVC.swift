@@ -285,18 +285,6 @@ extension HomeVC: UITableViewDataSource{
     
 }
 extension HomeVC: UITextFieldDelegate {
-    func searchState(str: String) -> Bool{
-        var state = str.replacingOccurrences(of: " ", with: "")
-        if locationModel.state.contains(state) {
-            return true
-        }
-        else{
-            return false
-        }
-    }
-    func splitText(text: String) -> UInt32? {
-        return UnicodeScalar(text)?.value
-    }
     func searchState(){
         var stateArr = locationModel.cityArr
         var text = bottomSheetView.searchBar.text ?? ""
@@ -317,12 +305,8 @@ extension HomeVC: UITextFieldDelegate {
         }
     }
     
-    
     @objc func textFieldDidChange(_ sender: Any?) {
         searchState()
         bottomSheetView.tableView.reloadData()
     }
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        print("start")
-//    }
 }
