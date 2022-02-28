@@ -16,6 +16,7 @@ class BottomSheetView: UIView {
     let searchBar = SearchBar()
     let tableView = UITableView().then{
         $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.showsVerticalScrollIndicator = false
     }
     
     func setLayout(){
