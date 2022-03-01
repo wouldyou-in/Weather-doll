@@ -40,7 +40,9 @@ class HomeVC: UIViewController {
     }
     //bottomSheet
     private let bottomSheetView = BottomSheetView()
-    
+    private let bottomSheetBackgroundView = UIView().then{
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0)
+    }
     //firstView
     private let firstView = FirstScene()
     
@@ -132,11 +134,23 @@ class HomeVC: UIViewController {
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = .zero
     }
     func bottomSheetSetting(){
+        let height = UIScreen.getDeviceHeight() * 0.73
+        
+        bottomSheetView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(bottomSheetBackgroundView)
         view.addSubview(bottomSheetView)
+
         bottomSheetView.snp.makeConstraints{
-            $0.bottom.leading.trailing.equalToSuperview().offset(0)
-            $0.height.equalTo(600)
+            $0.leading.bottom.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(0)
         }
+        bottomSheetBackgroundView.snp.makeConstraints{
+            $0.bottom.leading.trailing.equalTo(view).offset(0)
+            $0.top.equalToSuperview().offset(0)
+        }
+        print(bottomSheetView.frame)
+        bottomSheetBackgroundView.isHidden = true
         bottomSheetView.isHidden = true
         
         bottomSheetView.tableView.delegate = self
@@ -144,6 +158,10 @@ class HomeVC: UIViewController {
         bottomSheetView.searchBar.delegate = self
 
         bottomSheetView.searchBar.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(bottomSheetBackgroundClicked(_:)))
+        bottomSheetBackgroundView.addGestureRecognizer(gesture)
+        bottomSheetBackgroundView.isUserInteractionEnabled = true
     }
     
     func pangestureAction(){
@@ -153,38 +171,46 @@ class HomeVC: UIViewController {
         bottomSheetView.addGestureRecognizer(panGesture)
     }
     @objc func drag(sender: UIPanGestureRecognizer) {
-           viewTranslation = sender.translation(in: bottomSheetView)
-           viewVelocity = sender.translation(in: bottomSheetView)
-           switch sender.state {
-           case .changed:
-               if viewVelocity.y < 0 {
-                   bottomSheetView.snp.remakeConstraints{
-                       $0.bottom.leading.trailing.equalToSuperview().offset(0)
-                       $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
-                   }
-               }
-               else {
-                   bottomSheetView.snp.remakeConstraints{
-                       $0.bottom.leading.trailing.equalToSuperview().offset(0)
-                       $0.height.equalTo((UIScreen.getDeviceHeight() * 0.73) - viewVelocity.y)
-                   }
-               }
-           case .ended:
-               if viewTranslation.y < 200 {
-                   bottomSheetView.snp.remakeConstraints{
-                       $0.bottom.leading.trailing.equalToSuperview().offset(0)
-                       $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
-                   }
-               }
-               else {
-                   bottomSheetView.isHidden = true
-               }
-              
-           default:
-               print("error")
-               break
-           }
-       }
+        viewTranslation = sender.translation(in: bottomSheetView)
+        viewVelocity = sender.translation(in: bottomSheetView)
+        switch sender.state {
+        case .changed:
+            if viewVelocity.y < 0 {
+                bottomSheetView.snp.remakeConstraints{
+                    $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                    $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
+                }
+            }
+            else {
+                bottomSheetView.snp.remakeConstraints{
+                    $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                    $0.height.equalTo((UIScreen.getDeviceHeight() * 0.73) - viewVelocity.y)
+                }
+                print(viewVelocity.y * 0.002)
+                bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5 - (viewVelocity.y * 0.002))
+
+            }
+        case .ended:
+            if viewTranslation.y < 200 {
+                bottomSheetView.snp.remakeConstraints{
+                    $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                    $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
+                }
+            }
+            else {
+                bottomSheetView.isHidden = true
+                bottomSheetBackgroundView.isHidden = true
+                bottomSheetView.snp.updateConstraints{
+                    $0.height.equalTo(0)
+                }
+                bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0)
+            }
+          
+        default:
+            print("error")
+            break
+        }
+    }
 
     func getWeatherData(){
         GetWeatherDataService.shared.getWeatherData(lat: latitude, lon: longitude, appid: SecureURL.userID){ (response) in
@@ -193,6 +219,12 @@ class HomeVC: UIViewController {
                    case .success(let data) :
                        if let response = data as? WeatherDataModel{
                            print(response)
+                           self.setTempData(
+                            temp: response.main.temp,
+                            minTemp: response.main.tempMin,
+                            maxTemp: response.main.tempMax,
+                            feelTemp: response.main.feelsLike,
+                            hum: response.main.humidity)
                        }
                    case .requestErr(let message) :
                        print("requestERR")
@@ -206,6 +238,24 @@ class HomeVC: UIViewController {
             
                }
     }
+
+    func tempCalcul(temp: Double) -> String{
+        var str = temp - 273.15
+        return String(Int(str))
+    }
+    
+    func setTempData(temp: Double, minTemp: Double, maxTemp: Double, feelTemp: Double, hum: Int) {
+        tempLabel.text = tempCalcul(temp: temp) + "°"
+        weatherDetailView.minTemp = tempCalcul(temp: minTemp)
+        weatherDetailView.maxTemp = tempCalcul(temp: maxTemp)
+        weatherDetailView.feelTemp = tempCalcul(temp: feelTemp)
+        weatherDetailView.humidity = String(hum)
+        
+        weatherDetailView.setWeatherData()
+    }
+    
+    
+    
     func setFirstView() {
         UserDefaults.standard.set(true, forKey: "isFirst")
         if UserDefaults.standard.bool(forKey: "isFirst") {
@@ -223,6 +273,9 @@ class HomeVC: UIViewController {
     
     
     func setLocationStr() {
+        UserDefaults.standard.register(defaults: ["isFirst" : true])
+
+        
         let userDefault = UserDefaults.standard
         print(userDefault.bool(forKey: "isFirst"), "isFirst")
         
@@ -232,22 +285,37 @@ class HomeVC: UIViewController {
         else {
             locationLabel.selectedLabel.text = userDefault.string(forKey: "locationName")
             locationLabel.selectedLabelDescription.text = "의 날씨입니다!"
+            
+            var locationStr = removeSpaceStr(text: userDefault.string(forKey: "locationName") ?? "") ?? ""
+            
+            longitude = locationModel.longlatiDict[locationStr]?[0] ?? ""
+            latitude = locationModel.longlatiDict[locationStr]?[1] ?? ""
+            
+            getWeatherData()
         }
     }
     
-    
+    func removeSpaceStr(text: String) -> String {
+        let str = text.replacingOccurrences(of: " ", with: "")
+        return str
+    }
     @objc private func locationLabelClicked(_ sender: Any){
-        if (bottomSheetView.isHidden == true){
-            bottomSheetView.presentAnimation()
-        }
+//        if (bottomSheetView.isHidden == true){
+//            bottomSheetView.presentAnimation()
+//            bottomSheetBackgroundView.changeColor()
+//        }
+//
         bottomSheetView.isHidden = false
-            bottomSheetView.snp.remakeConstraints{
-                $0.bottom.leading.trailing.equalToSuperview().offset(0)
-                $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
-            }
-        }
+        bottomSheetBackgroundView.isHidden = false
+        bottomSheetView.presentAnimation()
+        bottomSheetBackgroundView.changeColor()
+    }
+    
     @objc private func firstViewClicked(_ sender: Any){
         firstView.isHidden = true
+    }
+    @objc private func bottomSheetBackgroundClicked(_ sender: Any) {
+        bottomSheetView.dismissAnimation(view: bottomSheetBackgroundView)
     }
      
 }
