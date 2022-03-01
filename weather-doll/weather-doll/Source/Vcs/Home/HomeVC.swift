@@ -17,7 +17,7 @@ class HomeVC: UIViewController {
         $0.textColor = UIColor.white
         $0.text = "--°"
     }
-    private let weatherImageView = UIImageView().then{
+    private var weatherImageView = UIImageView().then{
         $0.image = UIImage(named: "sunny")
     }
     private var weatherDetailView = WeatherDiscriptionView(maxTemp: "--", minTemp: "--", feelTemp: "--", humidity: "--", dust: "--", fineDust: "--")
@@ -239,6 +239,7 @@ class HomeVC: UIViewController {
                             maxTemp: response.main.tempMax,
                             feelTemp: response.main.feelsLike,
                             hum: response.main.humidity)
+                           self.changeWeatherImage(weather: response.weather[0].icon)
                            self.collectionView.reloadData()
                        }
                    case .requestErr(let message) :
@@ -267,6 +268,38 @@ class HomeVC: UIViewController {
         weatherDetailView.humidity = String(hum)
         
         weatherDetailView.setWeatherData()
+    }
+    
+    func changeWeatherImage(weather: String) {
+        let date = Date()
+        var currentTime: String = ""
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "HH"
+        currentTime = dateformatter.string(from: date)
+        print(currentTime)
+        
+        //이건 고민좀
+        switch weather{
+        case "01d", "01n":
+            if (Int(currentTime) ?? 0 > 06) && (Int(currentTime) ?? 0 < 18) {weatherImageView.image = UIImage(named: "sunny")}
+            else {weatherImageView.image = UIImage(named: "night")}
+        case "02d", "02n":
+            weatherImageView.image = UIImage(named: "cloudy")
+        case "03d", "03n":
+            weatherImageView.image = UIImage(named: "cloudy")
+        case "04d", "04n":
+            weatherImageView.image = UIImage(named: "cloudy")
+        case "09d", "09n", "10d", "10n":
+            weatherImageView.image = UIImage(named: "drizzle")
+        case "11d", "11n":
+            weatherImageView.image = UIImage(named: "thunderstroms")
+        case "13d", "13n":
+            weatherImageView.image = UIImage(named: "snow")
+        case "50d", "50n":
+            weatherImageView.image = UIImage(named: "fog")
+        default:
+            print("error")
+        }
     }
     
     
