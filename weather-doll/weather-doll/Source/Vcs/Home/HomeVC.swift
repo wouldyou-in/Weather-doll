@@ -55,6 +55,19 @@ class HomeVC: UIViewController {
     var viewVelocity = CGPoint(x: 0, y: 0)
     
     var stateResult = [String]()
+    var temp: Int = 0
+    
+    //dataModel
+    var allModel = CellModel.allModel
+    var clothModel = CellModel.clothModel
+    var foodModel = CellModel.foodModel
+    var pyshicalModel = CellModel.pyshicalModel
+    var lifeModel = CellModel.lifeModel
+    
+    var recommendText: String = "전체"
+    var sortedDict: [Dictionary<String, Int>.Element] = []
+    var allModelDict: [Dictionary<String, Int>.Element] = []
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -70,6 +83,7 @@ class HomeVC: UIViewController {
         pangestureAction()
         bottomSheetSetting()
         setLocationStr()
+        setAllmodelSorting()
     }
     
     func setTopViewLayout(){
@@ -225,6 +239,7 @@ class HomeVC: UIViewController {
                             maxTemp: response.main.tempMax,
                             feelTemp: response.main.feelsLike,
                             hum: response.main.humidity)
+                           self.collectionView.reloadData()
                        }
                    case .requestErr(let message) :
                        print("requestERR")
@@ -300,11 +315,6 @@ class HomeVC: UIViewController {
         return str
     }
     @objc private func locationLabelClicked(_ sender: Any){
-//        if (bottomSheetView.isHidden == true){
-//            bottomSheetView.presentAnimation()
-//            bottomSheetBackgroundView.changeColor()
-//        }
-//
         bottomSheetView.isHidden = false
         bottomSheetBackgroundView.isHidden = false
         bottomSheetView.presentAnimation()
@@ -317,19 +327,85 @@ class HomeVC: UIViewController {
     @objc private func bottomSheetBackgroundClicked(_ sender: Any) {
         bottomSheetView.dismissAnimation(view: bottomSheetBackgroundView)
     }
+    func sortDict(dic: [String: Int]) -> [Dictionary<String, Int>.Element] {
+        let sorted = dic.sorted {$0.1 > $1.1}
+        return sorted
+    }
+    func setAllmodelSorting() {
+        sortedDict = sortDict(dic: allModel)
+    }
+    func setDescription(index: IndexPath) -> String{
+        print(sortedDict, "sorted")
+        switch recommendText {
+        case "전체":
+            return CellModel.allModelCheck(obj: sortedDict[index.row].key, index: sortedDict[index.row].value, temp: temp)
+        case "의류":
+            return CellModel.checkCloth(cloths: sortedDict[index.row].key, index: sortedDict[index.row].value, temp: temp)
+        case "음식":
+            return CellModel.checkFood(food: sortedDict[index.row].key, index: sortedDict[index.row].value, temp: temp)
+        case "활동":
+            return CellModel.checkExercise(exercise: sortedDict[index.row].key, index: sortedDict[index.row].value, temp: temp)
+        case "생활":
+            return CellModel.checkLife(life: sortedDict[index.row].key, index: sortedDict[index.row].value, temp: temp)
+        default:
+            return "setDescriptionErr"
+        }
+    }
+
      
 }
 
 extension HomeVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        print(allModel.count, "count")
+        switch recommendText {
+        case "전체":
+            return allModel.count
+        case "의류":
+            return clothModel.count
+        case "음식":
+            return foodModel.count
+        case "활동":
+            return pyshicalModel.count
+        case "생활":
+            return lifeModel.count
+        default:
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CollectionHeaderView", for: indexPath)
-            print(headerView)
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "CollectionHeaderView", for: indexPath) as! CollectionHeaderView
+            headerView.recommendButtonCompletion = {
+                text in
+                switch text{
+                case "전체":
+                    self.recommendText = text
+                    self.sortedDict = self.sortDict(dic: self.allModel)
+                    self.collectionView.reloadData()
+                case "의류":
+                    self.recommendText = text
+                    self.sortedDict = self.sortDict(dic: self.clothModel)
+                    self.collectionView.reloadData()
+                case "음식":
+                    self.recommendText = text
+                    self.sortedDict = self.sortDict(dic: self.foodModel)
+                    self.collectionView.reloadData()
+                case "활동":
+                    self.recommendText = text
+                    self.sortedDict = self.sortDict(dic: self.pyshicalModel)
+                    self.collectionView.reloadData()
+                case "생활":
+                    self.recommendText = text
+                    self.sortedDict = self.sortDict(dic: self.lifeModel)
+                    self.collectionView.reloadData()
+                default:
+                    print("Error")
+                }
+                return text
+            }
         return headerView
             
         default:
@@ -342,7 +418,13 @@ extension HomeVC: UICollectionViewDelegate {
 extension HomeVC: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecommendCVC", for: indexPath) as! RecommendCVC
-        cell.setData(indexName: "패딩 지수", indexValue: "87", description: "두꺼운 오리털 패딩을 입어야 할 것 같아요.")
+        
+        let descript = setDescription(index: indexPath)
+                
+        cell.setData(indexName: sortedDict[indexPath.row].key,
+                     indexValue: String(sortedDict[indexPath.row].value),
+                     description: descript)
+//        cell.setData(indexName: "패딩 지수", indexValue: "87", description: "두꺼운 오리털 패딩을 입어야 할 것 같아요.")
         
         return cell
     }
