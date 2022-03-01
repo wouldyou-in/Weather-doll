@@ -9,10 +9,26 @@ import UIKit
 import SnapKit
 import Then
 
+class buttonNameAction: UITapGestureRecognizer {
+    var text: String = ""
+    var button: ThemeButton?
+}
+
 class CollectionHeaderView: UICollectionReusableView {
     
-    let recommendThemeArr: [String] = ["전체", "의류", "취미", "활동", "생활"]
+    let recommendThemeArr: [String] = ["전체", "의류", "음식", "활동", "생활"]
 
+    var recommendButtonCompletion: ((String) -> String)?
+    
+    let allButton = ThemeButton()
+    let clothesButton = ThemeButton()
+    let hobbyButton = ThemeButton()
+    let exersiceButton = ThemeButton()
+    let lifeButton = ThemeButton()
+    
+    var buttonArr: [ThemeButton] = []
+
+    
     private let titleLabel = UILabel().then{
         $0.font = UIFont.gmarketSansMediumFont(ofSize: 24)
         $0.textColor = UIColor.selectThemeColor
@@ -27,6 +43,7 @@ class CollectionHeaderView: UICollectionReusableView {
         $0.isLayoutMarginsRelativeArrangement = true
     }
     func setLayout(){
+        
         addSubviews([titleLabel, selectButtonStackView])
         titleLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(15)
@@ -43,20 +60,45 @@ class CollectionHeaderView: UICollectionReusableView {
     }
     
     func setButton(){
-        recommendThemeArr.forEach{
-            let button = ThemeButton()
-            selectButtonStackView.addArrangedSubview(button)
-            button.snp.makeConstraints{
+        var index = 0
+        allButton.titleLabel.textColor = UIColor.white
+        allButton.backgroundColor = UIColor.selectThemeColor
+        buttonArr = [allButton, clothesButton, hobbyButton, exersiceButton, lifeButton]
+        selectButtonStackView.addArrangedSubviews(buttonArr)
+        buttonArr.forEach {
+            let gesture = buttonNameAction(target: self, action: #selector(recommendButtonClicked(gesture:)))
+            $0.addGestureRecognizer(gesture)
+            $0.isUserInteractionEnabled = true
+            gesture.button = $0
+            gesture.text = recommendThemeArr[index]
+            $0.titleLabel.text = recommendThemeArr[index]
+            $0.snp.makeConstraints{
                 $0.width.equalTo(36)
                 $0.height.equalTo(24)
             }
-            button.titleLabel.text = $0
-            print(button)
+            index += 1
         }
+    }
+    
+    func clearColor(){
+        buttonArr.forEach{
+            $0.backgroundColor = UIColor.white
+            $0.titleLabel.textColor = UIColor.selectThemeColor
+        }
+    }
+    
+    @objc func recommendButtonClicked(gesture: buttonNameAction) {
+        print("clicked")
+        clearColor()
+        gesture.button?.titleLabel.textColor = UIColor.white
+        gesture.button?.backgroundColor = UIColor.selectThemeColor
+        guard let completion = recommendButtonCompletion else {return}
+        completion(gesture.text)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -66,7 +108,5 @@ class CollectionHeaderView: UICollectionReusableView {
     init(){
         super.init(frame: .zero)
         setLayout()
-        print(reuseIdentifier)
-
     }
 }
