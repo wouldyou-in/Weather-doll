@@ -444,6 +444,7 @@ extension HomeVC: UICollectionViewDelegate {
         default:
             assert(false)
         }
+        return UICollectionReusableView()
     }
 
     
