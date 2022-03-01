@@ -45,9 +45,29 @@ extension UIView {
         self.endEditing(true)
     }
     func presentAnimation() {
-        UIView.animate(withDuration: 0.5, animations: ({
-            self.frame = CGRect(x: 0, y: -UIScreen.getDeviceHeight(), width: UIScreen.getDeviceWidth(), height: UIScreen.getDeviceHeight() * 0.73)
-        }))
+        let height = UIScreen.getDeviceHeight() * 0.73
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
+            self.snp.updateConstraints{
+                $0.height.equalTo(height)
+            }
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    func dismissAnimation(view: UIView) {
+        let height = UIScreen.getDeviceHeight() * 0.73
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
+            self.snp.updateConstraints{
+                $0.height.equalTo(0)
+            }
+            view.isHidden = true
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    func changeColor() {
+        UIView.animate(withDuration: 0.5){
+            self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.superview?.layoutIfNeeded()
+        }
     }
 }
 
