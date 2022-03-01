@@ -16,6 +16,7 @@ class RecommendCVC: UICollectionViewCell {
     let titleLabel = UILabel().then{
         $0.font = UIFont.gmarketSansMediumFont(ofSize: 18)
         $0.textColor = UIColor.mainThemeColor
+        $0.numberOfLines = 2
         $0.textAlignment = .center
     }
     
@@ -46,12 +47,12 @@ class RecommendCVC: UICollectionViewCell {
             $0.width.equalTo(100)
         }
         indexValueLabel.snp.makeConstraints{
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.top.equalToSuperview().offset(50)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(130)
         }
         descriptionLabel.snp.makeConstraints{
-            $0.top.equalTo(indexValueLabel.snp.bottom).offset(10)
+            $0.top.equalToSuperview().offset(132)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(132)
         }
