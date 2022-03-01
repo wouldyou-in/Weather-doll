@@ -18,20 +18,14 @@ class LocationLabel: UIView {
     private let locationImageView = UIImageView().then{
         $0.image = UIImage(named: "Location")
     }
-    //지역 선택 안했을시
-    private let notSelectedLabel = UILabel().then{
+    //지역 선택 했을시
+    var selectedLabel = UILabel().then{
         $0.text = "지역을 선택해주세요."
         $0.font = UIFont.gmarketSansBoldFont(ofSize: 24)
         $0.textColor = UIColor.white
     }
-    //지역 선택 했을시
-    var selectedLabel = UILabel().then{
-        $0.text = ""
-        $0.font = UIFont.gmarketSansBoldFont(ofSize: 24)
-        $0.textColor = UIColor.white
-    }
     lazy var selectedLabelDescription = UILabel().then{
-        $0.text = "의 날씨입니다!"
+        $0.text = ""
         $0.font = UIFont.gmarketSansLightFont(ofSize: 24)
         $0.textColor = UIColor.white
     }
@@ -47,19 +41,12 @@ class LocationLabel: UIView {
         fatalError("init(coder: ) has not been implemented")
     }
     
-    init(type: locationType){
+    init(description: String){
         super.init(frame: .zero)
-        self.addSubview(locationImageView)
+        self.addSubviews([locationImageView, selectedLabel, selectedLabelDescription, underlineView])
+        selectedLabelDescription.text = description
         defaultLayout()
-        
-        switch type{
-        case .noSelected:
-            self.addSubviews([notSelectedLabel, underlineView])
-            setNotSelectedLayout()
-        default:
-            self.addSubviews([selectedLabel, selectedLabelDescription, underlineView])
-            setSelectedLayout()
-        }
+       
     }
     
     func defaultLayout() {
@@ -68,23 +55,6 @@ class LocationLabel: UIView {
             $0.top.bottom.leading.equalToSuperview().offset(0)
             $0.width.height.equalTo(24)
         }
-        
-    }
-    
-    func setNotSelectedLayout() {
-        notSelectedLabel.snp.makeConstraints{
-            $0.leading.equalTo(locationImageView.snp.trailing).offset(0)
-            $0.top.bottom.equalToSuperview().offset(0)
-        }
-        underlineView.snp.makeConstraints{
-            $0.top.equalTo(notSelectedLabel.snp.bottom).offset(3)
-            $0.leading.equalTo(notSelectedLabel.snp.leading).offset(0)
-            $0.trailing.equalTo(notSelectedLabel.snp.trailing).offset(0)
-            $0.height.equalTo(2)
-        }
-    }
-    
-    func setSelectedLayout() {
         selectedLabel.snp.makeConstraints{
             $0.leading.equalTo(locationImageView.snp.trailing).offset(0)
             $0.top.bottom.equalToSuperview().offset(0)

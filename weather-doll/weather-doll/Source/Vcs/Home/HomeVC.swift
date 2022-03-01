@@ -11,7 +11,7 @@ import Then
 
 class HomeVC: UIViewController {
     //topView
-    private var locationLabel = LocationLabel(type: .noSelected)
+    private var locationLabel = LocationLabel(description: "")
     private let tempLabel = UILabel().then {
         $0.font = UIFont.gmarketSansBoldFont(ofSize: 64)
         $0.textColor = UIColor.white
@@ -38,7 +38,28 @@ class HomeVC: UIViewController {
         $0.bounces = true
         $0.showsVerticalScrollIndicator = false
     }
+    //bottomSheet
+    private let bottomSheetView = BottomSheetView()
+    private let bottomSheetBackgroundView = UIView().then{
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0)
+    }
+    //firstView
+    private let firstView = FirstScene()
+    
     let head = CollectionHeaderView()
+    
+    var latitude: String = ""
+    var longitude: String = ""
+    
+    var viewTranslation = CGPoint(x: 0, y: 0)
+    var viewVelocity = CGPoint(x: 0, y: 0)
+    
+    var stateResult = [String]()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getWeatherData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +67,9 @@ class HomeVC: UIViewController {
         collectionViewSetting()
         setTopViewLayout()
         setRecommendViewLayout()
+        pangestureAction()
+        bottomSheetSetting()
+        setLocationStr()
     }
     
     func setTopViewLayout(){
@@ -79,10 +103,13 @@ class HomeVC: UIViewController {
             $0.trailing.equalTo(-15)
             $0.width.height.equalTo(36)
         }
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(locationLabelClicked(_:)))
+        locationLabel.addGestureRecognizer(gesture)
+        locationLabel.isUserInteractionEnabled = true
     }
     
     func setRecommendViewLayout(){
-
         view.addSubview(recommendBackgroundView)
         recommendBackgroundView.addSubview(collectionView)
         collectionView.addSubview(head)
@@ -105,10 +132,192 @@ class HomeVC: UIViewController {
         collectionView.register(CollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionHeaderView")
         
         (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.estimatedItemSize = .zero
+    }
+    func bottomSheetSetting(){
+        let height = UIScreen.getDeviceHeight() * 0.73
+        
+        bottomSheetView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(bottomSheetBackgroundView)
+        view.addSubview(bottomSheetView)
 
+        bottomSheetView.snp.makeConstraints{
+            $0.leading.bottom.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(0)
+        }
+        bottomSheetBackgroundView.snp.makeConstraints{
+            $0.bottom.leading.trailing.equalTo(view).offset(0)
+            $0.top.equalToSuperview().offset(0)
+        }
+        print(bottomSheetView.frame)
+        bottomSheetBackgroundView.isHidden = true
+        bottomSheetView.isHidden = true
+        
+        bottomSheetView.tableView.delegate = self
+        bottomSheetView.tableView.dataSource = self
+        bottomSheetView.searchBar.delegate = self
 
+        bottomSheetView.searchBar.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(bottomSheetBackgroundClicked(_:)))
+        bottomSheetBackgroundView.addGestureRecognizer(gesture)
+        bottomSheetBackgroundView.isUserInteractionEnabled = true
+    }
+    
+    func pangestureAction(){
+        bottomSheetView.frame = CGRect(x: 0, y: 0, width: UIScreen.getDeviceWidth(), height: UIScreen.getDeviceHeight() * 0.32)
+        bottomSheetView.center = CGPoint(x: UIScreen.getDeviceWidth() / 2, y: UIScreen.getDeviceHeight() * 0.32)
+           let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.drag))
+        bottomSheetView.addGestureRecognizer(panGesture)
+    }
+    @objc func drag(sender: UIPanGestureRecognizer) {
+        viewTranslation = sender.translation(in: bottomSheetView)
+        viewVelocity = sender.translation(in: bottomSheetView)
+        switch sender.state {
+        case .changed:
+            if viewVelocity.y < 0 {
+                bottomSheetView.snp.remakeConstraints{
+                    $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                    $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
+                }
+            }
+            else {
+                bottomSheetView.snp.remakeConstraints{
+                    $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                    $0.height.equalTo((UIScreen.getDeviceHeight() * 0.73) - viewVelocity.y)
+                }
+                print(viewVelocity.y * 0.002)
+                bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5 - (viewVelocity.y * 0.002))
+
+            }
+        case .ended:
+            if viewTranslation.y < 200 {
+                bottomSheetView.snp.remakeConstraints{
+                    $0.bottom.leading.trailing.equalToSuperview().offset(0)
+                    $0.height.equalTo(UIScreen.getDeviceHeight() * 0.73)
+                }
+            }
+            else {
+                bottomSheetView.isHidden = true
+                bottomSheetBackgroundView.isHidden = true
+                bottomSheetView.snp.updateConstraints{
+                    $0.height.equalTo(0)
+                }
+                bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0)
+            }
+          
+        default:
+            print("error")
+            break
+        }
     }
 
+    func getWeatherData(){
+        GetWeatherDataService.shared.getWeatherData(lat: latitude, lon: longitude, appid: SecureURL.userID){ (response) in
+                   switch response
+                   {
+                   case .success(let data) :
+                       if let response = data as? WeatherDataModel{
+                           print(response)
+                           self.setTempData(
+                            temp: response.main.temp,
+                            minTemp: response.main.tempMin,
+                            maxTemp: response.main.tempMax,
+                            feelTemp: response.main.feelsLike,
+                            hum: response.main.humidity)
+                       }
+                   case .requestErr(let message) :
+                       print("requestERR")
+                   case .pathErr :
+                       print("pathERR")
+                   case .serverErr:
+                       print("serverERR")
+                   case .networkFail:
+                       print("networkFail")
+                   }
+            
+               }
+    }
+
+    func tempCalcul(temp: Double) -> String{
+        var str = temp - 273.15
+        return String(Int(str))
+    }
+    
+    func setTempData(temp: Double, minTemp: Double, maxTemp: Double, feelTemp: Double, hum: Int) {
+        tempLabel.text = tempCalcul(temp: temp) + "°"
+        weatherDetailView.minTemp = tempCalcul(temp: minTemp)
+        weatherDetailView.maxTemp = tempCalcul(temp: maxTemp)
+        weatherDetailView.feelTemp = tempCalcul(temp: feelTemp)
+        weatherDetailView.humidity = String(hum)
+        
+        weatherDetailView.setWeatherData()
+    }
+    
+    
+    
+    func setFirstView() {
+        UserDefaults.standard.set(true, forKey: "isFirst")
+        if UserDefaults.standard.bool(forKey: "isFirst") {
+            view.addSubview(firstView)
+            firstView.setLayout(locView: locationLabel, notiButton: notiButton)
+            firstView.snp.makeConstraints{
+                $0.top.bottom.leading.trailing.equalTo(0)
+            }
+        }
+       
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(firstViewClicked(_:)))
+        firstView.addGestureRecognizer(gesture)
+        firstView.isUserInteractionEnabled = true
+    }
+    
+    
+    func setLocationStr() {
+        UserDefaults.standard.register(defaults: ["isFirst" : true])
+
+        
+        let userDefault = UserDefaults.standard
+        print(userDefault.bool(forKey: "isFirst"), "isFirst")
+        
+        if userDefault.bool(forKey: "isFirst") {
+            setFirstView()
+        }
+        else {
+            locationLabel.selectedLabel.text = userDefault.string(forKey: "locationName")
+            locationLabel.selectedLabelDescription.text = "의 날씨입니다!"
+            
+            var locationStr = removeSpaceStr(text: userDefault.string(forKey: "locationName") ?? "") ?? ""
+            
+            longitude = locationModel.longlatiDict[locationStr]?[0] ?? ""
+            latitude = locationModel.longlatiDict[locationStr]?[1] ?? ""
+            
+            getWeatherData()
+        }
+    }
+    
+    func removeSpaceStr(text: String) -> String {
+        let str = text.replacingOccurrences(of: " ", with: "")
+        return str
+    }
+    @objc private func locationLabelClicked(_ sender: Any){
+//        if (bottomSheetView.isHidden == true){
+//            bottomSheetView.presentAnimation()
+//            bottomSheetBackgroundView.changeColor()
+//        }
+//
+        bottomSheetView.isHidden = false
+        bottomSheetBackgroundView.isHidden = false
+        bottomSheetView.presentAnimation()
+        bottomSheetBackgroundView.changeColor()
+    }
+    
+    @objc private func firstViewClicked(_ sender: Any){
+        firstView.isHidden = true
+    }
+    @objc private func bottomSheetBackgroundClicked(_ sender: Any) {
+        bottomSheetView.dismissAnimation(view: bottomSheetBackgroundView)
+    }
+     
 }
 
 extension HomeVC: UICollectionViewDelegate {
@@ -157,5 +366,59 @@ extension HomeVC: UICollectionViewDelegateFlowLayout{
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 155, height: 180)
+    }
+}
+
+extension HomeVC: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
+}
+extension HomeVC: UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return stateResult.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchTVC.identifier) as! SearchTVC
+        cell.selectionStyle = .none
+        cell.setData(city: stateResult[indexPath.row])
+                
+        cell.selectButtonCompletion = {
+            location in
+            UserDefaults.standard.set(false, forKey: "isFirst")
+            UserDefaults.standard.set(location, forKey: "locationName")
+            self.setLocationStr()
+            return location
+        }
+        return cell
+    }
+    
+}
+extension HomeVC: UITextFieldDelegate {
+    func searchState(){
+        var stateArr = locationModel.cityArr
+        var text = bottomSheetView.searchBar.text ?? ""
+        var start = 0
+        var answer = [Int]()
+        stateResult = []
+        var t = String()
+        
+        for state in stateArr{
+            t = state
+            while let range = t.range(of: text) {
+                start += t.distance(from: t.startIndex, to: range.lowerBound)
+                answer.append(start)
+                start += t.distance(from: t.startIndex, to: range.upperBound) - 1
+                t = String(t[range.upperBound...])
+                stateResult.append(state)
+            }
+        }
+    }
+    
+    @objc func textFieldDidChange(_ sender: Any?) {
+        searchState()
+        bottomSheetView.tableView.reloadData()
     }
 }
