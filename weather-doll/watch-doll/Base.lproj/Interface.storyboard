@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="19529" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch45"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="19514"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="GmarketSansBold.otf">
+            <string>GmarketSansBold</string>
+        </array>
+        <array key="GmarketSansLight.otf">
+            <string>GmarketSansLight</string>
+        </array>
+        <array key="GmarketSansMedium.otf">
+            <string>GmarketSansMedium</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Interface Controller-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="watch_doll" customModuleProvider="target">
+                    <items>
+                        <group width="1" alignment="left" id="6pI-hE-HYQ">
+                            <items>
+                                <label alignment="left" text="동기화해주세요" textAlignment="right" id="fvt-yA-Xk0">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="17"/>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
+                        <group width="1" alignment="left" id="0FG-l0-uH6">
+                            <items>
+                                <imageView width="50" height="50" alignment="right" verticalAlignment="center" id="rD3-Oa-730">
+                                    <variation key="device=watch38mm" height="50" width="50"/>
+                                    <variation key="device=watch40mm" height="55" width="55"/>
+                                    <variation key="device=watch41mm" height="55" width="55"/>
+                                    <variation key="device=watch42mm" height="55" width="55"/>
+                                    <variation key="device=watch44mm" height="53" width="53"/>
+                                    <variation key="device=watch45mm" height="59" width="59"/>
+                                </imageView>
+                                <label alignment="left" verticalAlignment="center" text="--" textAlignment="center" id="KjR-Bl-Y8p">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="40"/>
+                                    <variation key="device=watch38mm">
+                                        <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="38"/>
+                                    </variation>
+                                    <variation key="device=watch40mm">
+                                        <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="48"/>
+                                    </variation>
+                                    <variation key="device=watch41mm">
+                                        <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="48"/>
+                                    </variation>
+                                    <variation key="device=watch42mm">
+                                        <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="45"/>
+                                    </variation>
+                                    <variation key="device=watch44mm">
+                                        <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="60"/>
+                                    </variation>
+                                    <variation key="device=watch45mm">
+                                        <fontDescription key="font" name="GmarketSansBold" family="Gmarket Sans" pointSize="64"/>
+                                    </variation>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
+                        <group width="1" alignment="left" id="Afz-NU-73l">
+                            <items>
+                                <label alignment="left" text="온도 : --" id="j4w-UG-Ni0">
+                                    <fontDescription key="font" name="GmarketSansLight" family="Gmarket Sans" pointSize="12"/>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
+                        <group width="1" alignment="left" id="Obb-Ra-Jdj">
+                            <items>
+                                <label alignment="left" text="습도 : --" id="J0M-Vb-Yzj">
+                                    <fontDescription key="font" name="GmarketSansLight" family="Gmarket Sans" pointSize="12"/>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
+                        <group width="1" alignment="left" id="ePI-Ub-tuT">
+                            <items>
+                                <label alignment="left" text="미세먼지 : --" id="6Jh-fL-4FF">
+                                    <fontDescription key="font" name="GmarketSansLight" family="Gmarket Sans" pointSize="12"/>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
+                        <group width="1" alignment="left" id="dfM-jA-dKS">
+                            <items>
+                                <label alignment="left" text="초 미세먼지 : --" id="gwI-vA-KxY">
+                                    <fontDescription key="font" name="GmarketSansLight" family="Gmarket Sans" pointSize="12"/>
+                                </label>
+                            </items>
+                            <edgeInsets key="margins" left="5" right="0.0" top="0.0" bottom="0.0"/>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="dustLabel" destination="6Jh-fL-4FF" id="QYo-gM-SWR"/>
+                        <outlet property="highDustLabel" destination="gwI-vA-KxY" id="8MH-pc-Lke"/>
+                        <outlet property="humdityLabel" destination="J0M-Vb-Yzj" id="i4Q-06-iUg"/>
+                        <outlet property="iconImageView" destination="rD3-Oa-730" id="ZqR-jF-IVO"/>
+                        <outlet property="locationLabel" destination="fvt-yA-Xk0" id="J8a-WO-jL1"/>
+                        <outlet property="tempDetailLabel" destination="j4w-UG-Ni0" id="v5q-zi-k6C"/>
+                        <outlet property="tempLabel" destination="KjR-Bl-Y8p" id="HuX-aL-3Go"/>
+                        <segue destination="aOB-vw-6lZ" kind="relationship" relationship="nextPage" id="slO-LQ-A3d"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="-72" y="344"/>
+        </scene>
+        <!--Second ViewIFC-->
+        <scene sceneID="6aY-gZ-2pg">
+            <objects>
+                <controller id="aOB-vw-6lZ" customClass="SecondViewIFC" customModule="watch_doll_WatchKit_Extension">
+                    <items>
+                        <group width="1" alignment="left" id="AKA-Qp-ZSD">
+                            <items>
+                                <group width="1" alignment="left" id="4ni-g2-MFa">
+                                    <items>
+                                        <group width="1" height="54" alignment="left" id="r3a-yw-3Vr">
+                                            <items>
+                                                <label height="20" alignment="left" verticalAlignment="center" text="코트 지수" textAlignment="left" id="8JU-Ni-G6C">
+                                                    <color key="textColor" red="0.0" green="0.56863188740000004" blue="0.22745651010000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="18"/>
+                                                </label>
+                                                <label width="49" height="54" alignment="right" text="100" id="pbh-nO-kk8">
+                                                    <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="25"/>
+                                                </label>
+                                            </items>
+                                        </group>
+                                    </items>
+                                </group>
+                            </items>
+                            <color key="backgroundColor" red="0.1411764324" green="0.1411764324" blue="0.1411764324" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </group>
+                        <group width="1" alignment="left" id="3rD-il-1LC">
+                            <items>
+                                <group width="1" height="54" alignment="left" id="Jtz-rl-qGp">
+                                    <items>
+                                        <label height="20" alignment="left" verticalAlignment="center" text="코트 지수" id="sr4-Vg-xvX">
+                                            <color key="textColor" red="0.0" green="0.56863188740000004" blue="0.22745651010000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="18"/>
+                                        </label>
+                                        <label width="49" height="54" alignment="right" text="100" id="8aX-ob-rcU">
+                                            <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="25"/>
+                                        </label>
+                                    </items>
+                                </group>
+                            </items>
+                            <color key="backgroundColor" red="0.1411764324" green="0.1411764324" blue="0.1411764324" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </group>
+                        <group width="1" alignment="left" id="AKB-dB-OUr">
+                            <items>
+                                <group width="1" height="54" alignment="left" id="CVK-Ej-PN6">
+                                    <items>
+                                        <label height="20" alignment="left" verticalAlignment="center" text="코트 지수" id="2SQ-bM-5rg">
+                                            <color key="textColor" red="0.0" green="0.56863188740000004" blue="0.22745651010000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="18"/>
+                                        </label>
+                                        <label width="49" height="54" alignment="right" text="100" id="vkd-HE-L2V">
+                                            <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="25"/>
+                                        </label>
+                                    </items>
+                                </group>
+                            </items>
+                            <color key="backgroundColor" red="0.1411764324" green="0.1411764324" blue="0.1411764324" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </group>
+                        <group width="1" alignment="left" id="UML-v4-xjJ">
+                            <items>
+                                <group width="1" height="54" alignment="left" id="JTj-a9-niq">
+                                    <items>
+                                        <label height="20" alignment="left" verticalAlignment="center" text="코트 지수" id="67g-9s-Wp6">
+                                            <color key="textColor" red="0.0" green="0.56863188740000004" blue="0.22745651010000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="18"/>
+                                        </label>
+                                        <label width="49" height="54" alignment="right" text="100" id="9US-wI-PDF">
+                                            <fontDescription key="font" name="GmarketSansMedium" family="Gmarket Sans" pointSize="25"/>
+                                        </label>
+                                    </items>
+                                </group>
+                            </items>
+                            <color key="backgroundColor" red="0.1411764324" green="0.1411764324" blue="0.1411764324" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="clothIndexNumLAbel" destination="9US-wI-PDF" id="AWp-kZ-Y97"/>
+                        <outlet property="clothNameLabel" destination="67g-9s-Wp6" id="AcC-TS-xaH"/>
+                        <outlet property="foodIndexNameLabel" destination="8JU-Ni-G6C" id="kG7-7a-Z9s"/>
+                        <outlet property="foodIndexNumLabel" destination="pbh-nO-kk8" id="wqR-gJ-n0A"/>
+                        <outlet property="hobbyIndexNameLabel" destination="sr4-Vg-xvX" id="nPr-wi-tsX"/>
+                        <outlet property="hobbyIndexNumLabel" destination="8aX-ob-rcU" id="K7H-ZQ-W0P"/>
+                        <outlet property="lifeIndexNameLabel" destination="2SQ-bM-5rg" id="p1d-9F-eor"/>
+                        <outlet property="lifeIndexNumLabel" destination="vkd-HE-L2V" id="lwf-9N-v7P"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="186" y="343.5"/>
+        </scene>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut">
+                    <items>
+                        <label alignment="left" text="Alert Label" numberOfLines="0" id="IdU-wH-bcW"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" identifier="myCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="IdU-wH-bcW" id="JKC-fr-R95"/>
+                        <segue destination="4sK-HA-Art" kind="relationship" relationship="dynamicNotificationInterface" id="kXh-Jw-8B1"/>
+                        <segue destination="eXb-UN-Cd0" kind="relationship" relationship="dynamicInteractiveNotificationInterface" id="mpB-YA-K8N"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="220" y="643"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="ZPc-GJ-vnh">
+            <objects>
+                <controller id="4sK-HA-Art" customClass="NotificationController" customModule="watch_doll" customModuleProvider="target"/>
+            </objects>
+            <point key="canvasLocation" x="468" y="643"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="Niz-AI-uX2">
+            <objects>
+                <controller id="eXb-UN-Cd0" customClass="NotificationController" customModule="watch_doll" customModuleProvider="target"/>
+            </objects>
+            <point key="canvasLocation" x="468" y="345"/>
+        </scene>
+    </scenes>
+</document>
