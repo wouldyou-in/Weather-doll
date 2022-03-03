@@ -1,0 +1,6 @@
+framework module Pods_watch_doll {
+  umbrella header "Pods-watch-doll-umbrella.h"
+
+  export *
+  module * { export * }
+}

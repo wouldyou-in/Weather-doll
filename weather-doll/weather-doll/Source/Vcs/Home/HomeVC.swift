@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import WatchConnectivity
 
 class HomeVC: UIViewController {
     //topView
@@ -68,6 +69,9 @@ class HomeVC: UIViewController {
     var sortedDict: [Dictionary<String, Int>.Element] = []
     var allModelDict: [Dictionary<String, Int>.Element] = []
     
+    //watch
+    var session: WCSession?
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -84,6 +88,8 @@ class HomeVC: UIViewController {
         bottomSheetSetting()
         setLocationStr()
         setAllmodelSorting()
+        configureWatchKitSession()
+        dataSend()
     }
     
     func setTopViewLayout(){
@@ -163,7 +169,6 @@ class HomeVC: UIViewController {
             $0.bottom.leading.trailing.equalTo(view).offset(0)
             $0.top.equalToSuperview().offset(0)
         }
-        print(bottomSheetView.frame)
         bottomSheetBackgroundView.isHidden = true
         bottomSheetView.isHidden = true
         
@@ -200,7 +205,6 @@ class HomeVC: UIViewController {
                     $0.bottom.leading.trailing.equalToSuperview().offset(0)
                     $0.height.equalTo((UIScreen.getDeviceHeight() * 0.73) - viewVelocity.y)
                 }
-                print(viewVelocity.y * 0.002)
                 bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5 - (viewVelocity.y * 0.002))
 
             }
@@ -232,7 +236,6 @@ class HomeVC: UIViewController {
                    {
                    case .success(let data) :
                        if let response = data as? WeatherDataModel{
-                           print(response)
                            self.setTempData(
                             temp: response.main.temp,
                             minTemp: response.main.tempMin,
@@ -276,7 +279,6 @@ class HomeVC: UIViewController {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "HH"
         currentTime = dateformatter.string(from: date)
-        print(currentTime)
         
         //이건 고민좀
         switch weather{
@@ -318,13 +320,29 @@ class HomeVC: UIViewController {
         firstView.addGestureRecognizer(gesture)
         firstView.isUserInteractionEnabled = true
     }
+    func configureWatchKitSession(){
+        if WCSession.isSupported() {
+            session = WCSession.default
+            session?.delegate = self
+            session?.activate()
+        }
+        
+    }
+    func dataSend(){
+        if let validSession = self.session, validSession.isReachable {
+            var longLati = [longitude, latitude, locationLabel.selectedLabel.text]
+            let data: [String: Any] = ["iPhone": longLati as Any]
+            validSession.transferUserInfo(data)
+            validSession.sendMessage(data, replyHandler: nil, errorHandler: nil)
+        }
+    }
     
     
     func setLocationStr() {
         UserDefaults.standard.register(defaults: ["isFirst" : true])
 
         
-        let userDefault = UserDefaults.standard
+        let userDefault = UserDefaults.shared
         print(userDefault.bool(forKey: "isFirst"), "isFirst")
         
         if userDefault.bool(forKey: "isFirst") {
@@ -352,6 +370,7 @@ class HomeVC: UIViewController {
         bottomSheetBackgroundView.isHidden = false
         bottomSheetView.presentAnimation()
         bottomSheetBackgroundView.changeColor()
+        dataSend()
     }
     
     @objc private func firstViewClicked(_ sender: Any){
@@ -368,7 +387,6 @@ class HomeVC: UIViewController {
         sortedDict = sortDict(dic: allModel)
     }
     func setDescription(index: IndexPath) -> String{
-        print(sortedDict, "sorted")
         switch recommendText {
         case "전체":
             return CellModel.allModelCheck(obj: sortedDict[index.row].key, index: sortedDict[index.row].value, temp: temp)
@@ -390,7 +408,6 @@ class HomeVC: UIViewController {
 
 extension HomeVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(allModel.count, "count")
         switch recommendText {
         case "전체":
             return allModel.count
@@ -503,9 +520,10 @@ extension HomeVC: UITableViewDataSource{
                 
         cell.selectButtonCompletion = {
             location in
-            UserDefaults.standard.set(false, forKey: "isFirst")
-            UserDefaults.standard.set(location, forKey: "locationName")
+            UserDefaults.shared.set(false, forKey: "isFirst")
+            UserDefaults.shared.set(location as? String, forKey: "locationName")
             self.setLocationStr()
+            self.dataSend()
             return location
         }
         return cell
@@ -537,4 +555,21 @@ extension HomeVC: UITextFieldDelegate {
         searchState()
         bottomSheetView.tableView.reloadData()
     }
+}
+
+extension HomeVC: WCSessionDelegate {
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        let data: [String: Any] = ["iPhone": locationLabel.selectedLabel.text as Any]
+        session.transferUserInfo(data)
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        let data: [String: Any] = ["iPhone": locationLabel.selectedLabel.text as Any]
+        session.transferUserInfo(data)
+    }
+    
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        
+    }
+    
 }

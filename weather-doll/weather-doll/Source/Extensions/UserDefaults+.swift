@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+
+extension UserDefaults {
+    static var shared: UserDefaults {
+        let combined = UserDefaults.standard
+        let appGroupId = "group.share.weatherData"
+        combined.addSuite(named: appGroupId)
+        return combined
+    }
+}

@@ -11,3 +11,21 @@ pod 'Alamofire'
   # Pods for weather-doll
 
 end
+
+target 'watch-doll' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+pod 'Alamofire'
+
+  # Pods for Umpah-iOS WatchKit App
+
+end
+
+target 'watch-doll WatchKit Extension' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+pod 'Alamofire'
+
+  # Pods for Umpah-iOS WatchKit Extension
+
+end
