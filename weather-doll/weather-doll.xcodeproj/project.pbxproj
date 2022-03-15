@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03F7F2434AB90BAF7E9C19FB /* Pods_weather_doll.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8496038D30436B7320DBED22 /* Pods_weather_doll.framework */; };
 		05DF6C957267A58FEB5266F9 /* Pods_watch_doll_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21D5516E9E704F1A3609B5FF /* Pods_watch_doll_WatchKit_Extension.framework */; };
+		3603FDCF27DF9D93006DC289 /* NotiAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3603FDCE27DF9D93006DC289 /* NotiAlertView.swift */; };
 		3608A02327CCF8A900A4E433 /* FirstScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3608A02227CCF8A900A4E433 /* FirstScene.swift */; };
 		3608A02627CE191C00A4E433 /* CellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3608A02527CE191C00A4E433 /* CellModel.swift */; };
 		3608A02827CE483400A4E433 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3608A02727CE483400A4E433 /* UIStackView+.swift */; };
@@ -114,6 +115,7 @@
 /* Begin PBXFileReference section */
 		12F14F86D8589EB480EF94BD /* Pods_watch_doll.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_watch_doll.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21D5516E9E704F1A3609B5FF /* Pods_watch_doll_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_watch_doll_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3603FDCE27DF9D93006DC289 /* NotiAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAlertView.swift; sourceTree = "<group>"; };
 		3608A02227CCF8A900A4E433 /* FirstScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstScene.swift; sourceTree = "<group>"; };
 		3608A02527CE191C00A4E433 /* CellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellModel.swift; sourceTree = "<group>"; };
 		3608A02727CE483400A4E433 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
@@ -212,6 +214,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3603FDCD27DF9D85006DC289 /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				3603FDCE27DF9D93006DC289 /* NotiAlertView.swift */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
 		3608A02127CCF88700A4E433 /* FirstScene */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,6 +464,7 @@
 		36F91FFA27CA242F00EA4937 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				3603FDCD27DF9D85006DC289 /* AlertView */,
 				3608A02127CCF88700A4E433 /* FirstScene */,
 				3614962127CBD2140038C792 /* BottomSheet */,
 				36F9200227CA5B2400EA4937 /* HomeRecommend */,
@@ -807,6 +818,7 @@
 				36F91FF527CA00EB00EA4937 /* UIScreen+.swift in Sources */,
 				36F91FF327CA002300EA4937 /* UIFont+.swift in Sources */,
 				3614962327CBD2270038C792 /* BottomSheetView.swift in Sources */,
+				3603FDCF27DF9D93006DC289 /* NotiAlertView.swift in Sources */,
 				36F91FE627C9FD8300EA4937 /* Date+.swift in Sources */,
 				3661C17127CF8DA30068B718 /* UserDefaults+.swift in Sources */,
 				3614961527CBCBC40038C792 /* Constans.swift in Sources */,
