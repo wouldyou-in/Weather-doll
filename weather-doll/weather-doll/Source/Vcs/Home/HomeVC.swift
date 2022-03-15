@@ -72,6 +72,9 @@ class HomeVC: UIViewController {
     //watch
     var session: WCSession?
     
+    //notiView
+    private let notiView = NotiAlertView()
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -90,6 +93,18 @@ class HomeVC: UIViewController {
         setAllmodelSorting()
         configureWatchKitSession()
         dataSend()
+        setNotiAlertViewLayout()
+    }
+    func setNotiAlertViewLayout(){
+        self.view.addSubview(notiView)
+        
+        notiView.snp.makeConstraints{
+            $0.top.equalToSuperview().offset(200)
+            $0.leading.trailing.equalToSuperview().offset(0)
+            $0.height.equalTo(350)
+        }
+        
+        notiView.isHidden = true
     }
     
     func setTopViewLayout(){
@@ -123,6 +138,8 @@ class HomeVC: UIViewController {
             $0.trailing.equalTo(-15)
             $0.width.height.equalTo(36)
         }
+        
+        notiButton.addTarget(self, action: #selector(notiButtonClicked(_:)), for: .touchUpInside)
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(locationLabelClicked(_:)))
         locationLabel.addGestureRecognizer(gesture)
@@ -188,6 +205,11 @@ class HomeVC: UIViewController {
         bottomSheetView.center = CGPoint(x: UIScreen.getDeviceWidth() / 2, y: UIScreen.getDeviceHeight() * 0.32)
            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.drag))
         bottomSheetView.addGestureRecognizer(panGesture)
+    }
+    @objc func notiButtonClicked (_ sender: UIButton) {
+        if notiView.isHidden {
+            notiView.isHidden = false
+        }
     }
     @objc func drag(sender: UIPanGestureRecognizer) {
         viewTranslation = sender.translation(in: bottomSheetView)
