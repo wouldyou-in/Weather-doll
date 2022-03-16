@@ -58,6 +58,9 @@ class HomeVC: UIViewController {
     var stateResult = [String]()
     var temp: Int = 0
     
+    var isNotiClicked: Bool = false
+    var selectTimeStr: String = ""
+    
     //dataModel
     var allModel = CellModel.allModel
     var clothModel = CellModel.clothModel
@@ -206,9 +209,30 @@ class HomeVC: UIViewController {
            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.drag))
         bottomSheetView.addGestureRecognizer(panGesture)
     }
+    func dimissNotiAlert() {
+        if isNotiClicked {
+            isNotiClicked = false
+            notiView.isHidden = true
+            bottomSheetBackgroundView.isHidden = true
+        }
+    }
     @objc func notiButtonClicked (_ sender: UIButton) {
-        if notiView.isHidden {
+        if isNotiClicked == false {
+            isNotiClicked = true
             notiView.isHidden = false
+            bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            bottomSheetBackgroundView.isHidden = false
+        }
+        notiView.dateCompletion = { str in
+            if str == "취소" {
+                self.dimissNotiAlert()
+            }
+            else {
+                self.selectTimeStr = str
+                print(self.selectTimeStr, "선택한 시간")
+                self.dimissNotiAlert()
+            }
+            return str
         }
     }
     @objc func drag(sender: UIPanGestureRecognizer) {
@@ -400,6 +424,7 @@ class HomeVC: UIViewController {
     }
     @objc private func bottomSheetBackgroundClicked(_ sender: Any) {
         bottomSheetView.dismissAnimation(view: bottomSheetBackgroundView)
+        dimissNotiAlert()
     }
     func sortDict(dic: [String: Int]) -> [Dictionary<String, Int>.Element] {
         let sorted = dic.sorted {$0.1 > $1.1}
