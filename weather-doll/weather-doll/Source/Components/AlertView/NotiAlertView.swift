@@ -12,6 +12,8 @@ import Then
 
 class NotiAlertView: UIView {
     
+    var dateCompletion: ((String) -> String)?
+    
     private let timeLabel = UILabel().then{
         $0.font = UIFont.gmarketSansMediumFont(ofSize: 17)
         $0.text = "알림 받을 시간"
@@ -80,6 +82,20 @@ class NotiAlertView: UIView {
             $0.height.equalTo(40)
         }
         
+        cancelButton.addTarget(self, action: #selector(cancelButtonClicked(_:)), for: .touchUpInside)
+        acceptButton.addTarget(self, action: #selector(acceptButtonClicked(_:)), for: .touchUpInside)
+    }
+    
+    @objc func cancelButtonClicked(_ sender: UIButton) {
+        guard let completion = dateCompletion else { return }
+        completion("취소")
+    }
+    @objc func acceptButtonClicked(_ sender: UIButton){
+        guard let completion = dateCompletion else { return }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        var date = formatter.string(from: timepicker.date)
+        completion(date)
     }
     
     override init(frame: CGRect) {
