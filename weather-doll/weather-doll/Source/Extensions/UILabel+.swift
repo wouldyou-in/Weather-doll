@@ -29,8 +29,17 @@ extension UILabel {
         }
         rangeArr.forEach { (range) in
             attributeString.addAttribute(.font, value: font, range: range)
-            print(range)
         }
+        self.attributedText = attributeString
+    }
+    
+    func setBoldAttributeText(targetStr: String, font: UIFont) {
+        let text = self.text ?? ""
+        var range = NSRange(location: 0, length: text.count)
+        let attributeString = NSMutableAttributedString(string: text)
+        range = (attributeString.string as NSString).range(of: targetStr, range: range)
+        attributeString.addAttribute(.font, value: font, range: range)
+        
         self.attributedText = attributeString
     }
 }
