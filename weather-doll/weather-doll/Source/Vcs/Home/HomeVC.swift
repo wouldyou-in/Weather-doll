@@ -22,7 +22,7 @@ class HomeVC: UIViewController {
         $0.image = UIImage(named: "sunny")
     }
     private var weatherDetailView = WeatherDiscriptionView(maxTemp: "--", minTemp: "--", feelTemp: "--", humidity: "--", dust: "--", fineDust: "--")
-    private let notiButton = UIButton().then{
+    var notiButton = UIButton().then{
         $0.setBackgroundImage(UIImage(named: "Notification"), for: .normal)
     }
     //recommendView
@@ -60,7 +60,7 @@ class HomeVC: UIViewController {
     
     var isNotiClicked: Bool = false
     var selectTimeStr: String = ""
-    
+        
     //dataModel
     var allModel = CellModel.allModel
     var clothModel = CellModel.clothModel
@@ -79,14 +79,19 @@ class HomeVC: UIViewController {
     private let notiView = NotiAlertView()
     
     
+    private var observer: NSObjectProtocol?
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getWeatherData()
+        changeNotiButtonImage()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .mainThemeColor
+        addNotiObserver()
         collectionViewSetting()
         setTopViewLayout()
         setRecommendViewLayout()
@@ -98,8 +103,27 @@ class HomeVC: UIViewController {
         dataSend()
         setNotiAlertViewLayout()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func addNotiObserver() {
+        observer = NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main) {
+                [unowned self] notification in
+                print("노티센터 실행됨")
+                changeNotiButtonImage()
+            }
+    }
+    
     func setNotiAlertViewLayout(){
         self.view.addSubview(notiView)
+        
+        UserDefaults.standard.register(defaults: ["apnsPermission" : false])
         
         notiView.snp.makeConstraints{
             $0.top.equalToSuperview().offset(200)
@@ -142,6 +166,8 @@ class HomeVC: UIViewController {
             $0.width.height.equalTo(36)
         }
         
+        let notiButtonGesture = UILongPressGestureRecognizer(target: self, action: #selector(notiButtonLongClicked(_:)))
+        notiButton.addGestureRecognizer(notiButtonGesture)
         notiButton.addTarget(self, action: #selector(notiButtonClicked(_:)), for: .touchUpInside)
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(locationLabelClicked(_:)))
@@ -216,23 +242,55 @@ class HomeVC: UIViewController {
             bottomSheetBackgroundView.isHidden = true
         }
     }
-    @objc func notiButtonClicked (_ sender: UIButton) {
-        if isNotiClicked == false {
-            isNotiClicked = true
-            notiView.isHidden = false
-            bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            bottomSheetBackgroundView.isHidden = false
-        }
-        notiView.dateCompletion = { str in
-            if str == "취소" {
-                self.dimissNotiAlert()
+    
+    func setApnsPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: {didAllow,Error in
+            print(didAllow, "현재 상태")
+            UserDefaults.standard.set(didAllow, forKey: "apnsPermission")
+        })
+    }
+    
+    func changeNotiButtonImage (){
+        print("체인지 실행됨", UserDefaults.standard.bool(forKey: "apnsPermission"))
+            if UserDefaults.standard.bool(forKey: "apnsPermission") {
+                var image = UIImage(named: "Notification")?.withRenderingMode(.alwaysOriginal)
+                notiButton.setBackgroundImage(image, for: .normal)
+                print(notiButton.currentBackgroundImage)
             }
             else {
-                self.selectTimeStr = str
-                print(self.selectTimeStr, "선택한 시간")
-                self.dimissNotiAlert()
+                var image = UIImage(named: "Notification-off")?.withRenderingMode(.alwaysOriginal)
+                notiButton.setBackgroundImage(image, for: .normal)
+                print(notiButton.currentBackgroundImage)
             }
-            return str
+    }
+    
+    @objc func notiButtonLongClicked (_ sender: UIButton) {
+        print("길게 누르기")
+        if UserDefaults.standard.bool(forKey: "apnsPermission") {
+            if isNotiClicked == false {
+                isNotiClicked = true
+                notiView.isHidden = false
+                bottomSheetBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+                bottomSheetBackgroundView.isHidden = false
+            }
+            notiView.dateCompletion = { str in
+                if str == "취소" {
+                    self.dimissNotiAlert()
+                }
+                else {
+                    self.selectTimeStr = str
+                    print(self.selectTimeStr, "선택한 시간")
+                    self.dimissNotiAlert()
+                }
+                return str
+            }
+        }
+    }
+
+    
+    @objc func notiButtonClicked (_ sender: UIButton) {
+        if let appSetting = URL(string: UIApplication.openSettingsURLString){
+                UIApplication.shared.open(appSetting, options: [:], completionHandler: nil)
         }
     }
     @objc func drag(sender: UIPanGestureRecognizer) {

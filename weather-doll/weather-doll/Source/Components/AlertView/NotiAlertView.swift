@@ -26,6 +26,7 @@ class NotiAlertView: UIView {
         $0.numberOfLines = 2
         $0.textColor = UIColor.mainThemeColor
         $0.text = "날수가 지정한 시간에 오늘의 날씨와 날씨에 따른주요한 지수를 알려드려요."
+        $0.font = UIFont.gmarketSansMediumFont(ofSize: 17)
     }
     private let cancelButton = UIButton().then{
         $0.setTitle("취소", for: .normal)
@@ -53,6 +54,9 @@ class NotiAlertView: UIView {
         self.backgroundColor = UIColor.white
         self.clipsToBounds = true
         self.layer.cornerRadius = 20
+        
+        descriptionLabel.setBoldAttributeText(targetStr: "날수", font: UIFont.gmarketSansBoldFont(ofSize: 17))
+        
         
         timeLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(75)
