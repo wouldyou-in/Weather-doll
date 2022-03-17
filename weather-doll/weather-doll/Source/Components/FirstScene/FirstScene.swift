@@ -30,8 +30,9 @@ class FirstScene: UIView {
     private let notificationLabel = UILabel().then{
         $0.font = UIFont.gmarketSansMediumFont(ofSize: 18)
         $0.textColor = UIColor.white
-        $0.text = "이곳을 눌러 알림을\n키고 끌 수 있어요"
-        $0.numberOfLines = 2
+        $0.textAlignment = .right
+        $0.text = "이곳을 눌러 알림을\n키고 끌 수 있어요\n\n길게 누르게 되면\n알람시간을 설정할수 있어요!"
+        $0.numberOfLines = 5
     }
     
     func setLayout(locView: UIView, notiButton: UIButton) {
@@ -60,8 +61,8 @@ class FirstScene: UIView {
         notificationLabel.snp.makeConstraints{
             $0.top.equalTo(notificationView.snp.bottom).offset(5)
             $0.trailing.equalTo(notificationView.snp.trailing).offset(0)
-            $0.height.equalTo(40)
-            $0.width.equalTo(150)
+            $0.height.equalTo(90)
+            $0.width.equalTo(230)
         }
         
     }
