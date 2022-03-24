@@ -593,11 +593,16 @@ extension HomeVC: UICollectionViewDelegateFlowLayout{
         }
         
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 23
+            return 21
         }
         
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: 0, left: 23, bottom: 0, right: 23)
+            let ratio = UIScreen.getDeviceWidth() / 390.0
+            print(ratio, "ratio", CGFloat(UIScreen.getDeviceWidth()))
+            if ratio > 1.0 {
+                return UIEdgeInsets(top: 0, left: 35, bottom: 0, right: 35)
+            }
+            return UIEdgeInsets(top: 0, left: 21, bottom: 0, right: 21)
         }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: UIScreen.getDeviceWidth(), height: 80)
