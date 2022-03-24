@@ -86,8 +86,16 @@ class NotiAlertView: UIView {
             $0.height.equalTo(40)
         }
         
+        setTimepicker()
+        
         cancelButton.addTarget(self, action: #selector(cancelButtonClicked(_:)), for: .touchUpInside)
         acceptButton.addTarget(self, action: #selector(acceptButtonClicked(_:)), for: .touchUpInside)
+    }
+    func setTimepicker() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        var date = formatter.date(from: "08:00")
+        timepicker.setDate(date ?? Date(), animated: true)
     }
     
     @objc func cancelButtonClicked(_ sender: UIButton) {
